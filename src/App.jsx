@@ -6,16 +6,16 @@ const DUMMY_TODO = [
   {
     id: nanoid(),
     title: "Belajar React",
-    isComplete: false
+    isCompleted: false
   }
 ]
 
 function App() {
-  const [Todos, setTodos] = useState(DUMMY_TODO)
+  const [todos, setTodos] = useState(DUMMY_TODO)
   const [newTodo, setNewTodo] = useState('')
 
 function addNewTodo(){
-  const updatedTodos = [...Todos]
+  const updatedTodos = [...todos]
   const objTodo = {
     id: nanoid(),
     title: newTodo,
@@ -26,7 +26,19 @@ function addNewTodo(){
   setTodos(updatedTodos)
   setNewTodo('')
 }
+  function completeTodo(targetTodoId) {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === targetTodoId){
+        todo.isCompleted = !todo.isCompleted
+      }
 
+      return todo
+    })
+
+    setTodos(updatedTodos)
+
+    console.log(todos)
+  }
   return (
     <>
       <h1>Todo App</h1>
@@ -39,8 +51,15 @@ function addNewTodo(){
       <button onClick={() => addNewTodo()}>Create</button>
       <ul>
         {
-          Todos.map((todo) => (
-            <li key = {todo.id}>{todo.title} </li>
+          todos.map((todo) => (
+            <li key = {todo.id} 
+            className='todo-item'
+            style={{
+              textDecoration: todo.isCompleted ? 'line-through' : 'none'
+            }}
+            >
+              <input type='checkbox' onChange={() => completeTodo(todo.id)} />
+              {todo.title} </li>
           ))
         }
       </ul>
